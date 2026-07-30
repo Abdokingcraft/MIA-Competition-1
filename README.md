@@ -15,7 +15,15 @@ overall, i dont think DTC (`DecisionTreeClassifier`) is the best fit for this ta
 ## Day 2 :
 
 i just noticed that having a lower score is better than having a higher score 🫠 , now i am trying to figure out what did i do to get that 0.27 🤠
+I started looking for ways that I can improve my code but I haven't done anything that day
 
+
+## Day 3 :
+
+I also haven't done anything that day on the competition because I was focusing on finishing Task 2 that I couldn't do 
+
+
+## Day 4 :
 
 
 
