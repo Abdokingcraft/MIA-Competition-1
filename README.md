@@ -187,15 +187,15 @@ import pandas as pd
 from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.metrics import mean_squared_error
 
-# 1. Load Data
+# Loading Data
 train_df = pd.read_csv("tasks3/train.csv")
 test_df = pd.read_csv("tasks3/test.csv")
 solution_df = pd.read_csv("tasks3/solution.csv")
 
-# 2. Complete Feature Selection
+
 feature_cols = [
     "position", "preferred_foot", "match_result",
-    "market_value_eur", # Note: Usually named 'market_value_eur' in your earlier data, check your column name
+    "market_value_eur", 
     "goals_team", "goals_opponent",
     "minutes_played", "goals", "assists", "shots", "shots_on_target",
     "expected_goals_xg", "expected_assists_xa", "key_passes",
@@ -216,7 +216,7 @@ feature_cols = [
 
 feature_cols = [col for col in feature_cols if col in train_df.columns]
 
-# 3. Preprocessing & Encoding
+
 cat_cols = [col for col in ["position", "preferred_foot", "match_result"] if col in feature_cols]
 
 X_train = train_df[feature_cols].copy()
@@ -230,8 +230,7 @@ X_test = X_test.reindex(columns=X_train.columns, fill_value=0)
 test_with_solution = test_df.merge(solution_df, on="Id")
 y_test = test_with_solution['player_rating']
 
-# 4. Define & Train Model
-# Using HistGradientBoostingRegressor to avoid NaNs crashing the script
+# Training model
 
 gbr_model = HistGradientBoostingRegressor(
     max_iter=1000,             # More trees
@@ -245,10 +244,9 @@ gbr_model = HistGradientBoostingRegressor(
 print("Training model with expanded feature set...")
 gbr_model.fit(X_train, y_train)
 
-# 5. Predictions & Evaluation
+
 predictions = gbr_model.predict(X_test)
 
-# 6. Apply the 0-minute rule to predictions
 # If a player played 0 minutes, force their rating to 0.0
 zero_mask = test_df["minutes_played"] == 0
 predictions[zero_mask] = 0.0
@@ -256,7 +254,6 @@ predictions[zero_mask] = 0.0
 mse = mean_squared_error(y_test, predictions)
 print(f"(MSE): {mse:.4f}")
 
-# 7. Export Predictions
 submission_df = pd.DataFrame({
     "Id": test_df["Id"],
     "player_rating": predictions
